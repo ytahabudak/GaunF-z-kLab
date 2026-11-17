@@ -1,0 +1,32 @@
+# DENEY ŞABLONU. Dosya adını değiştirmeyin: deney.txt
+# Bu dosya ve deney videosu, ders klasörü içindeki kendi deney klasörüne konur (ör. 03-Ohm-Yasasi).
+# Klasör adındaki başındaki sayı (01, 02, 03) sıralamayı belirler.
+# "#" ile başlayan satırlar açıklamadır, silmeyin ya da bırakın, fark etmez.
+# Dosyayı UTF-8 olarak kaydedin (Not Defteri: Farklı Kaydet > Kodlama: UTF-8).
+
+BASLIK: 
+SURE: 90 dk
+ZORLUK: Kolay / Orta / Zor
+# Birden çok değeri ; ile ayırın
+OLCULEN: Periyot T (s); Uzunluk L (m)
+# Seçenekler: lazer; gerilim  (yoksa boş bırakın)
+UYARI: 
+# Video: YouTube bağlantısı yazın. YA DA video dosyasını klasöre video.mp4 adıyla koyun ve burayı boş bırakın.
+VIDEO: 
+
+[AMAC]
+Buraya deneyin amacını yazın.
+
+[TEORI]
+Buraya kısa teori yazın. Yeni paragraf için bir satır boşluk bırakın.
+
+[MALZEME]
+- Malzeme 1
+- Malzeme 2
+
+[ADIMLAR]
+- Birinci adım
+- İkinci adım
+
+[NOT]
+İsteğe bağlı: hata kaynakları, rapor notları vb.
