@@ -16,7 +16,6 @@ header.top a{text-decoration:none}
 header.top b{color:var(--amber)}
 /* HERO */
 .hero{position:relative;background:var(--ink);color:#e8eef5;min-height:78vh;display:flex;align-items:flex-end;overflow:hidden}
-.hero canvas{position:absolute;inset:0;width:100%;height:100%}
 .hero .txt{position:relative;padding:3rem 1.5rem 3.5rem;max-width:760px;text-shadow:0 2px 12px #000a}
 .hero h1{font-size:clamp(2.2rem,6vw,4rem);line-height:1.08;margin:0 0 .8rem}
 .hero p{font-size:1.15rem;margin:0;color:#c5d3e2}
@@ -53,14 +52,26 @@ header.top b{color:var(--amber)}
 footer{background:var(--ink);color:#9db1c7;padding:1.5rem;text-align:center;font:.9rem "Segoe UI",sans-serif}
 @media print{header.top,footer,.calc,.crumb{display:none}.nb{background:#fff}.sheet{box-shadow:none}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
-.msg{padding:2rem;font-family:"Segoe UI",sans-serif}</style>
+.msg{padding:2rem;font-family:"Segoe UI",sans-serif}
+header.top .brand{display:flex;align-items:center;gap:.7rem}
+header.top .brand img{height:42px;width:auto;background:#fff;border-radius:50%;padding:3px}
+.hero #cv{position:absolute;inset:0;width:100%;height:100%}
+#rk{position:absolute;left:76%;bottom:2.2rem;width:74px;margin-left:-37px;will-change:transform;filter:drop-shadow(0 0 18px #ffb45455)}
+#rk svg{display:block;width:100%;height:auto;overflow:visible}
+#fl{transform-box:fill-box;transform-origin:50% 0;animation:fk .12s infinite alternate}
+@keyframes fk{from{transform:scaleY(.75)}to{transform:scaleY(1.2)}}
+.pad{position:absolute;left:0;right:0;bottom:2.2rem;height:2px;background:linear-gradient(90deg,transparent,var(--amber),transparent);opacity:.5}
+#alt{position:absolute;right:1.2rem;top:1rem;font:700 .95rem "Courier New",monospace;color:var(--amber);background:#0c1a2bcc;border:1px solid var(--line);padding:.25rem .7rem;border-radius:4px}
+@media(max-width:700px){#rk{left:86%;width:54px;margin-left:-27px;opacity:.6}}
+@media(prefers-reduced-motion:reduce){#fl{animation:none}}
+</style>
 </head>
 <body>
 <header class="top ui">
-  <a href="#/"><b>Fizik Müh.</b> Deney Portalı</a>
+  <a class="brand" href="#/"><img src="logo.png" alt="Gaziantep Üniversitesi logosu" onerror="this.style.display='none'"><span><b>Fizik Müh.</b> Deney Portalı</span></a>
 </header>
 <main id="app"></main>
-<footer>Gaziantep Üniversitesi, Fizik Mühendisliği Bölümü</footer>
+<footer>Gaziantep Üniversitesi, Fizik Mühendisliği Bölümü<br>Yusuf Taha BUDAK tarafından hazırlanmıştır.</footer>
 <script>
 const $=s=>document.querySelector(s),app=$('#app'),BASE='dersler/',enc=encodeURIComponent;
 const UY={gerilim:"Yüksek gerilim: bağlantıları kapalı devrede yapın.",lazer:"Lazer: ışını göz hizasına ve yansıtıcı yüzeylere yöneltmeyin."};
@@ -107,10 +118,15 @@ async function video(k,d,v){
 async function home(){
   const ks=Object.keys(await getIdx()).sort(cmp);
   const L=await Promise.all(ks.map(async k=>({k,...await load(BASE+enc(k)+'/ders.txt')})));
-  return `<section class="hero"><canvas id="cv" aria-hidden="true"></canvas>
-  <div class="txt"><h1>Dalgaların kesiştiği yerde ölçüm başlar.</h1>
+  return `<section class="hero"><canvas id="cv" aria-hidden="true"></canvas><div class="pad"></div><div id="alt" aria-hidden="true">İrtifa: 0 m</div>
+  <div id="rk" aria-hidden="true"><svg viewBox="0 0 100 260"><g id="fl"><path d="M38 198 Q50 262 62 198Z" fill="#ffb454"/><path d="M44 198 Q50 235 56 198Z" fill="#fff3c4"/></g>
+  <path d="M22 150 L2 202 L22 190Z" fill="#ffb454"/><path d="M78 150 L98 202 L78 190Z" fill="#ffb454"/>
+  <path d="M50 4 C72 40 78 90 78 150 L78 192 L22 192 L22 150 C22 90 28 40 50 4Z" fill="#e8eef5"/>
+  <path d="M50 4 C60 18 66 34 69 52 L31 52 C34 34 40 18 50 4Z" fill="#ffb454"/>
+  <circle cx="50" cy="100" r="14" fill="#0c1a2b" stroke="#6fd3e8" stroke-width="4"/><rect x="36" y="192" width="28" height="9" fill="#5b6b7e"/></svg></div>
+  <div class="txt"><h1>Her fırlatış bir ölçümle başlar.</h1>
   <p>Gaziantep Üniversitesi Fizik Mühendisliği laboratuvar deneyleri: videolar, malzeme listeleri ve yapılış adımları tek yerde.</p>
-  <small class="ui">Fare ile ikinci kaynağı hareket ettirin ve girişim desenini izleyin.</small></div></section>
+  <small class="ui">Sayfayı aşağı kaydırın, roket yükselsin.</small></div></section>
   <section class="wrap"><h2 class="ui" style="margin-top:0">Dersler</h2><div class="courses">${
   L.map(d=>`<a class="course" href="#/${enc(d.k)}"><div class="kod">${esc(d.o.KOD||d.k)}</div><h3>${esc(d.o.AD||d.k)}</h3><p>${esc([d.o.OZET,d.o.DONEM].filter(Boolean).join(' · '))}</p></a>`).join('')||'<p>Henüz ders eklenmemiş.</p>'}</div></section>`;
 }
@@ -141,25 +157,19 @@ function calc(){const g=$('#go');if(!g)return;g.onclick=()=>{
   if(n<2){$('#out').textContent='En az iki sayı girin.';return}
   const m=v.reduce((a,b)=>a+b)/n,s=Math.sqrt(v.reduce((a,b)=>a+(b-m)**2,0)/(n-1));
   $('#out').innerHTML=`N = ${n}<br>Ortalama = ${m.toPrecision(5)}<br>Standart sapma = ${s.toPrecision(3)}<br>Ortalamanın belirsizliği = ${(s/Math.sqrt(n)).toPrecision(3)}`}}
-function interference(cv){
-  const ctx=cv.getContext('2d'),S=5;let W,H,img,mx=.7,my=.5,t=0,raf;
-  const off=document.createElement('canvas'),o=off.getContext('2d');
-  function size(){W=Math.ceil(cv.clientWidth/S);H=Math.ceil(cv.clientHeight/S);off.width=W;off.height=H;img=o.createImageData(W,H);cv.width=W;cv.height=H;}
-  size();addEventListener('resize',size);
-  cv.parentNode.addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect();mx=(e.clientX-r.left)/r.width;my=(e.clientY-r.top)/r.height});
-  const still=matchMedia('(prefers-reduced-motion:reduce)').matches;
-  function frame(){
-    const ax=W*.25,ay=H*.4,bx=W*mx,by=H*my,k=.55;
-    for(let y=0;y<H;y++)for(let x=0;x<W;x++){
-      const r1=Math.hypot(x-ax,y-ay),r2=Math.hypot(x-bx,y-by);
-      const v=(Math.sin(k*r1-t)+Math.sin(k*r2-t))/2, a=Math.max(0,v)**2;
-      const i=(y*W+x)*4;
-      img.data[i]=255*a*.9;img.data[i+1]=180*a+20;img.data[i+2]=84*a+40;img.data[i+3]=255*(.25+.6*a);
-    }
-    ctx.fillStyle='#0c1a2b';ctx.fillRect(0,0,W,H);o.putImageData(img,0,0);ctx.drawImage(off,0,0);
-    t+=.12;if(!still)raf=requestAnimationFrame(frame);
-  }
-  frame();stop=()=>{cancelAnimationFrame(raf);removeEventListener('resize',size)};
+function rocket(){
+  const hero=$('.hero'),rk=$('#rk'),alt=$('#alt'),cv=$('#cv'),ctx=cv.getContext('2d');let st=[],busy=false;
+  function size(){cv.width=hero.clientWidth;cv.height=hero.clientHeight;
+    st=Array.from({length:110},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*1.3+.3,s:Math.random()*.5+.1}));upd()}
+  function upd(){busy=false;
+    const h=hero.clientHeight,y=Math.max(0,scrollY),p=Math.min(y/h,1.15);
+    rk.style.transform=`translateY(${-p*h*1.05}px)`;
+    alt.textContent='İrtifa: '+Math.round(y*12).toLocaleString('tr-TR')+' m';
+    ctx.clearRect(0,0,cv.width,cv.height);ctx.fillStyle='#e8eef5';
+    st.forEach(s=>{ctx.globalAlpha=.35+.5*s.s;ctx.beginPath();ctx.arc(s.x,(s.y+y*s.s)%cv.height,s.r,0,7);ctx.fill()})}
+  const on=()=>{if(!busy){busy=true;requestAnimationFrame(upd)}};
+  addEventListener('scroll',on,{passive:true});addEventListener('resize',size);size();
+  stop=()=>{removeEventListener('scroll',on);removeEventListener('resize',size)};
 }
 
 async function route(){
@@ -169,7 +179,7 @@ async function route(){
   try{
     const h=a?(b?await exp(a,b):await course(a)):await home();
     if(my!==rid)return;
-    app.innerHTML=h;if(!a)interference($('#cv'));else if(b)calc();
+    app.innerHTML=h;if(!a)rocket();else if(b)calc();
   }catch(err){
     if(my!==rid)return;
     app.innerHTML=location.protocol==='file:'
